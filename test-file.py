@@ -1,0 +1,1 @@
+print('Test file for Mahjong AI')
