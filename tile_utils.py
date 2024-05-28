@@ -9,6 +9,15 @@ logging.basicConfig(filename = 'tile_utils_logging.log', level=level, format='%(
 
 # Method to check if three tiles form a set
 def is_set(*tiles) -> bool:
+    '''
+    Checks whether 2, 3, or 4 input tiles form a set (same suit and rank)
+    
+    Inputs:
+    2, 3, or 4 variables of the Tile class
+
+    Returns:
+    Boolean
+    '''
     try:
         # Check whether input tiles is empty
         if not tiles:
@@ -39,6 +48,15 @@ def is_set(*tiles) -> bool:
 
 # Method to check if three tiles form a run
 def is_run(tile1: Tile, tile2: Tile, tile3: Tile) -> bool:
+    '''
+    Checks whether 3 input tiles form a run (same suit, consecutive ranks)
+    
+    Inputs:
+    3 variables of the Tile class
+
+    Returns:
+    Boolean
+    '''
     try:
         # Check that all tiles are of the Tile class
         if not (isinstance(tile1, Tile) and isinstance(tile2, Tile) and isinstance(tile3, Tile)):
