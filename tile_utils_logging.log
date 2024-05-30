@@ -1,1 +1,27 @@
-2024-05-27 00:05:02,224 - DEBUG - Tiles have different suits: circle, circle, bamboo
+2024-05-27 00:05:02,224 - DEBUG - Tiles have different suits: circle, circle, bamboo2024-05-29 20:23:13,859 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 20:27:36,206 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 21:59:17,452 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:00:16,033 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:00:42,263 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:01:28,100 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:31:05,254 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:31:14,113 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:32:06,911 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:32:22,090 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:32:50,424 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:33:10,803 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:33:34,441 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:36:20,633 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:36:37,010 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:36:42,207 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 22:37:52,499 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:02:05,861 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:03:07,988 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:06:12,346 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:07:30,574 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:08:29,977 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:09:59,125 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:10:36,254 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:12:17,684 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:17:22,855 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
+2024-05-29 23:18:29,210 - ERROR - Error: input to is_set function does not contain 2, 3, or 4 tiles.
