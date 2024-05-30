@@ -150,6 +150,16 @@ class GameState:
         # Update the player's hand with the sorted version
         self.players[player] = sorted_hand
 
+    def print_player_hand(self, player: str):
+        '''
+        Prints every tile in a player's hand
+
+        Inputs:
+        a string representing a key to the self.players dictionary (e.g. 'player1')
+        '''
+        for tile in self.players[player]:
+            tile.display()
+
     def step_macro_direction(self) -> None:
         '''
         Updates the macro direction of the game

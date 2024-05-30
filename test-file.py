@@ -1,17 +1,26 @@
-print('Test file for Mahjong AI.')
-print('')
-print('This update is to test out creating a new branch.')
+from tile import Tile
+import logging
+from gamestate import GameState
+gamestate = GameState()
 
-players_dict = {
-    'player1': [],
-    'player2': [],
-    'player3': [],
-    'player4': []
-}
+manual_tiles = [
+    Tile('stick', 1),
+    Tile('stick', 2),
+    Tile('stick', 3),
+    Tile('east'),
+    Tile('east'),
+    Tile('east'),
+    Tile('stick', 8),
+    Tile('stick', 8),
+    Tile('stick', 8),
+    Tile('stick', 9),
+    Tile('stick', 9),
+    Tile('stick', 9),
+    Tile('circle', 4),
+    Tile('circle', 3)
+]
 
-categories_dict = {
-    'draw_pool': [1],
-    'discard_pool': [2],
-    **players_dict
-}
-print(categories_dict)
+for tile in manual_tiles:
+    gamestate.add_tile_to_hand(tile, 'player1')
+
+gamestate.print_player_hand('player1')
