@@ -5,22 +5,28 @@ import itertools
 
 import logging
 # Set warning level
-# level = logging.DEBUG
-level = logging.WARNING
+level = logging.DEBUG
+# level = logging.ERROR
 logging.basicConfig(filename = 'tile_utils_logging.log', level=level, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Method to check if three tiles form a set
-def is_set(*tiles) -> bool:
+def is_set(*args) -> bool:
     '''
     Checks whether 2, 3, or 4 input tiles form a set (same suit and rank)
     
     Inputs:
-    2, 3, or 4 variables of the Tile class
+    2, 3, or 4 variables of the Tile class as individual inputs or as a group of tiles
 
     Returns:
     Boolean
     '''
     try:
+        # Check whether input is a group of tiles or individual tiles
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            tiles = args[0]
+        else:
+            tiles = args
+
         # Check whether input tiles is empty
         if not tiles:
             logging.error('Error: input to is_set function is empty.')       
@@ -28,7 +34,7 @@ def is_set(*tiles) -> bool:
         
         # Check that there are only 2, 3, or 4 tiles
         if len(tiles) not in {2, 3, 4}:
-            logging.error('Error: input to is_set function does not contain 2, 3, or 4 tiles.')  
+            logging.warning('Error: input to is_set function does not contain 2, 3, or 4 tiles.')  
             return False
         
         # Check that all tiles are of the Tile class
@@ -138,6 +144,7 @@ def is_winning_hand(gamestate: GameState, player: str):
     
     # Check if there are enough valid groups to form a winning hand
     if len(valid_groups) < 4:
+        logging.debug("len(valid_groups) < 4")
         return is_winning, None
     
     # Generate all combinations of four groups
@@ -187,25 +194,27 @@ def compute_score(gamestate: GameState, player: str) -> int:
     
     is_winning, combination = is_winning_hand(gamestate, player)
 
-    print(f"is_winning = {is_winning}")
-    print('')
-
     if not is_winning:
         score = 0
         return score
-    
-    gamestate.print_player_hand(player)
     
     # Add double to combination
     double = []
     temp_hand = gamestate.players[player][:]
     # for tile in [tile for group in combination for tile in group]:
     #     temp_hand.remove(tile)
+    print("tiles being removed:")
     for group in combination:
         for tile in group:
+            tile.display()
             if tile not in temp_hand:
                 logging.debug(f"Error: tile {tile} not in player hand.")
-            temp_hand.remove(tile)
+            else:
+                temp_hand.remove(tile)
+
+    if len(temp_hand) != 2:
+        logging.error("Error: temp_hand does not have 2 tiles")
+        raise ValueError("temp_hand does not have 2 tiles")
 
     for tile in temp_hand:
         double.append(tile)
@@ -214,7 +223,7 @@ def compute_score(gamestate: GameState, player: str) -> int:
 
     # Initialize score - a winning hand is worth at least 2 points
     score = 2
-    gamestate.sort_player_hand[player]
+    gamestate.sort_player_hand(player)
     hand = gamestate.players[player]
 
     rank_suits = ['stick', 'circle', '10k']
