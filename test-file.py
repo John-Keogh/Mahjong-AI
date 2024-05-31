@@ -3,24 +3,11 @@ import logging
 from gamestate import GameState
 gamestate = GameState()
 
-manual_tiles = [
-    Tile('stick', 1),
-    Tile('stick', 2),
-    Tile('stick', 3),
-    Tile('east'),
-    Tile('east'),
-    Tile('east'),
-    Tile('stick', 8),
-    Tile('stick', 8),
-    Tile('stick', 8),
-    Tile('stick', 9),
-    Tile('stick', 9),
-    Tile('stick', 9),
-    Tile('circle', 4),
-    Tile('circle', 3)
-]
+tile1 = Tile(suit='stick', rank=1)
+tile2 = Tile(suit='stick', rank=1)
+tile3 = Tile(suit='stick', rank=1)
+group = [tile1, tile2, tile3]
 
-for tile in manual_tiles:
-    gamestate.add_tile_to_hand(tile, 'player1')
-
-gamestate.print_player_hand('player1')
+print(type(group))
+print('')
+print(isinstance(group, tuple))
