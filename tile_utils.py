@@ -2,9 +2,12 @@
 from tile import Tile
 from gamestate import GameState
 import itertools
+import copy
 
 import logging
 # Set warning level
+level = logging.DEBUG
+# level = logging.ERROR
 level = logging.DEBUG
 # level = logging.ERROR
 logging.basicConfig(filename = 'tile_utils_logging.log', level=level, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -129,7 +132,7 @@ def is_winning_hand(gamestate: GameState, player: str):
 
     # Sort and retrieve player hand
     gamestate.sort_player_hand(player)
-    player_hand = gamestate.players[player]
+    player_hand = copy.deepcopy(gamestate.players[player])
 
     # Generate a list of all valid runs/sets
     groups = list(itertools.combinations(player_hand, 3))
@@ -138,12 +141,12 @@ def is_winning_hand(gamestate: GameState, player: str):
         # if is_set(*group):
         if is_set(group[0], group[1], group[2]):
             valid_groups.append(group)
-
-        if is_run(group[0], group[1], group[2]):
+        elif is_run(group[0], group[1], group[2]):
             valid_groups.append(group)
     
     # Check if there are enough valid groups to form a winning hand
     if len(valid_groups) < 4:
+        return is_winning, combination
         logging.debug("len(valid_groups) < 4")
         return is_winning, None
     
@@ -152,6 +155,7 @@ def is_winning_hand(gamestate: GameState, player: str):
 
     # Check all possible combinations of four groups for a valid winning hand
     for combination in combinations:
+        # player_hand = copy.deepcopy(gamestate.players[player])
         # Boolean controls whether or not to check for final double
         win_possible = True
 
@@ -171,7 +175,7 @@ def is_winning_hand(gamestate: GameState, player: str):
             is_winning = True
             return is_winning, combination
     
-    return is_winning, None
+    return is_winning, combination
 
 def compute_score(gamestate: GameState, player: str) -> int:
     '''
@@ -194,35 +198,40 @@ def compute_score(gamestate: GameState, player: str) -> int:
     
     is_winning, combination = is_winning_hand(gamestate, player)
 
+    print('')
+    print(f'combination = \n{combination}')
+    print('')
+
     if not is_winning:
         score = 0
         return score
     
-    # Add double to combination
+    # "combination" does not currently contain the set of two tiles (the double) that make up the winning hand
+    # This code removes all tiles in "combinoation" from "temp_hand" to identify the double
+    # Then, the double is added as a tuple to "combination" so that "combination" contains all tiles in the player's hand organized into groups
+
+    # Initialize double
     double = []
-    temp_hand = gamestate.players[player][:]
-    # for tile in [tile for group in combination for tile in group]:
-    #     temp_hand.remove(tile)
-    print("tiles being removed:")
+
+    temp_hand = copy.deepcopy(gamestate.players[player])
+
+    # Loop through each group in combination and remove each tile from temp_hand
     for group in combination:
         for tile in group:
-            tile.display()
-            if tile not in temp_hand:
-                logging.debug(f"Error: tile {tile} not in player hand.")
-            else:
+            if tile in temp_hand:
                 temp_hand.remove(tile)
-
-    if len(temp_hand) != 2:
-        logging.error("Error: temp_hand does not have 2 tiles")
-        raise ValueError("temp_hand does not have 2 tiles")
+            else:
+                logging.error(f"Error: tile {tile} not in player hand.")
 
     for tile in temp_hand:
         double.append(tile)
     
     combination += (tuple(double),)
+    # (End code that adds the double to combination)
 
-    # Initialize score - a winning hand is worth at least 2 points
+    # Initialize score - a winning hand has a base value of 2 points
     score = 2
+    gamestate.sort_player_hand(player)
     gamestate.sort_player_hand(player)
     hand = gamestate.players[player]
 
@@ -285,4 +294,3 @@ def compute_score(gamestate: GameState, player: str) -> int:
                 score += 1
 
     return score
-

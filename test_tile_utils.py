@@ -120,7 +120,7 @@ class TestIsSetFunction(unittest.TestCase):
         for tile in manual_tiles:
             gamestate.add_tile_to_hand(tile, player)
 
-        result, combination = is_winning_hand(gamestate, player)
+        result, _ = is_winning_hand(gamestate, player)
         self.assertTrue(result)
 
     # def test_is_winning_hand_false(self):
@@ -147,13 +147,15 @@ class TestIsSetFunction(unittest.TestCase):
     #     for tile in manual_tiles:
     #         gamestate.add_tile_to_hand(tile, player)
         
-    #     result, combination = is_winning_hand(gamestate, player)
-    #     self.assertFalse(result)
+        result, _ = is_winning_hand(gamestate, player)
+        self.assertFalse(result)
 
-    # def test_score_2(self):
-    #     # Test most basic win condition
-    #     gamestate = GameState()
-    #     player = 'player1'
+    def test_score_2(self):
+        '''
+        Test lowest possible player hand score
+        '''
+        gamestate = GameState()
+        player = 'player1'
 
     #     manual_tiles = [
     #         Tile('stick', 1),
@@ -175,12 +177,18 @@ class TestIsSetFunction(unittest.TestCase):
     #     for tile in manual_tiles:
     #         gamestate.add_tile_to_hand(tile, player)
         
-    #     score = compute_score(gamestate, player)
-    #     result = score == 2
-    #     self.assertTrue(result)
+        score = compute_score(gamestate, player)
+        result = (score == 2)
+        self.assertTrue(result)
 
     # def test_score_5(self):
-    #     # Test for most basic win condition + all same suit
+    #     '''
+    #     Test whether all tiles with ranks are of the same suit
+    #     (e.g. only sticks or circles or 10ks with colors and directions)
+        
+    #     A winning hand that has all of the same suit adds 3 to player score
+    #     '''
+
     #     gamestate = GameState()
     #     player = 'player1'
 
@@ -205,9 +213,8 @@ class TestIsSetFunction(unittest.TestCase):
     #         gamestate.add_tile_to_hand(tile, player)
         
     #     score = compute_score(gamestate, player)
-    #     result = score == 5
-    #     if not result:
-    #         logging.error(f"Error: expected score = 5; actual score = {score}")
+
+    #     result = (score == 5)
     #     self.assertTrue(result)
 
 if __name__ == '__main__':

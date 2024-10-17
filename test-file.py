@@ -1,13 +1,31 @@
-from tile import Tile
-import logging
-from gamestate import GameState
+from tile_utils import is_set, is_run, is_winning_hand, compute_score, Tile, GameState
+
 gamestate = GameState()
+player = 'player1'
 
-tile1 = Tile(suit='stick', rank=1)
-tile2 = Tile(suit='stick', rank=1)
-tile3 = Tile(suit='stick', rank=1)
-group = [tile1, tile2, tile3]
+manual_tiles = [
+    Tile('stick', 1),
+    Tile('stick', 2),
+    Tile('stick', 3),
+    Tile('10k', 1),
+    Tile('10k', 1),
+    Tile('10k', 1),
+    Tile('stick', 8),
+    Tile('stick', 8),
+    Tile('stick', 8),
+    Tile('stick', 9),
+    Tile('stick', 9),
+    Tile('stick', 9),
+    Tile('circle', 4),
+    Tile('circle', 4)
+]
 
-print(type(group))
+for tile in manual_tiles:
+    gamestate.add_tile_to_hand(tile, player)
+
+is_winning, combination = is_winning_hand(gamestate, player)
+print(f"is_winning: {is_winning}")
 print('')
-print(isinstance(group, tuple))
+
+score = compute_score(gamestate, player)
+print(f"score: {score}")
