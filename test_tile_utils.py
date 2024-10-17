@@ -104,7 +104,7 @@ class TestIsSetFunction(unittest.TestCase):
         for tile in manual_tiles:
             gamestate.add_tile_to_hand(tile, player)
 
-        result, combination = is_winning_hand(gamestate, player)
+        result, _ = is_winning_hand(gamestate, player)
         self.assertTrue(result)
 
     def test_is_winning_hand_false(self):
@@ -131,10 +131,13 @@ class TestIsSetFunction(unittest.TestCase):
         for tile in manual_tiles:
             gamestate.add_tile_to_hand(tile, player)
         
-        result, combination = is_winning_hand(gamestate, player)
+        result, _ = is_winning_hand(gamestate, player)
         self.assertFalse(result)
 
     def test_score_2(self):
+        '''
+        Test lowest possible player hand score
+        '''
         gamestate = GameState()
         player = 'player1'
 
@@ -159,8 +162,44 @@ class TestIsSetFunction(unittest.TestCase):
             gamestate.add_tile_to_hand(tile, player)
         
         score = compute_score(gamestate, player)
-        result = score == 2
+        result = (score == 2)
         self.assertTrue(result)
+
+    # def test_score_5(self):
+    #     '''
+    #     Test whether all tiles with ranks are of the same suit
+    #     (e.g. only sticks or circles or 10ks with colors and directions)
+        
+    #     A winning hand that has all of the same suit adds 3 to player score
+    #     '''
+
+    #     gamestate = GameState()
+    #     player = 'player1'
+
+    #     manual_tiles = [
+    #         Tile('stick', 1),
+    #         Tile('stick', 2),
+    #         Tile('stick', 3),
+    #         Tile('stick', 1),
+    #         Tile('stick', 1),
+    #         Tile('stick', 1),
+    #         Tile('stick', 8),
+    #         Tile('stick', 8),
+    #         Tile('stick', 8),
+    #         Tile('stick', 9),
+    #         Tile('stick', 9),
+    #         Tile('stick', 9),
+    #         Tile('stick', 4),
+    #         Tile('stick', 4)
+    #     ]
+
+    #     for tile in manual_tiles:
+    #         gamestate.add_tile_to_hand(tile, player)
+        
+    #     score = compute_score(gamestate, player)
+
+    #     result = (score == 5)
+    #     self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()
