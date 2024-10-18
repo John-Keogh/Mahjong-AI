@@ -106,6 +106,7 @@ def is_run(tile1: Tile, tile2: Tile, tile3: Tile) -> bool:
 # Features to add:
 # 1) handle sets of 4/hands with more than 14 tiles
 # 2) handle sets with multiple win conditions
+# 3) Return a copy of the hand sorted into groups (including the group of 2)
 def is_winning_hand(gamestate: GameState, player: str):
     '''
     Checks whether a player's hand meets any win conditions
@@ -116,7 +117,8 @@ def is_winning_hand(gamestate: GameState, player: str):
 
     Returns:
     is_winning - boolean
-    combinations -  a set of groups that comprise the winning hand
+    grouped_hand - the winning hand grouped into sets
+        e.g. ((1 circle, 1 circle, 1 circle), (1 stick, 2 stick, 3 stick), (8 stick, 8 stick, 8 stick), (9 stick, 9 stick, 9 stick), (4 circle, 4 circle))
     '''
     if not isinstance(player, str):
         logging.error(f"Error: player input {player} is not a string.")
@@ -146,7 +148,6 @@ def is_winning_hand(gamestate: GameState, player: str):
     
     # Check if there are enough valid groups to form a winning hand
     if len(valid_groups) < 4:
-        return is_winning, combination
         logging.debug("len(valid_groups) < 4")
         return is_winning, None
     
@@ -154,13 +155,15 @@ def is_winning_hand(gamestate: GameState, player: str):
     combinations = list(itertools.combinations(valid_groups, 4))
 
     # Check all possible combinations of four groups for a valid winning hand
-    for combination in combinations:
-        # player_hand = copy.deepcopy(gamestate.players[player])
+    for grouped_hand in combinations:
+        # Reset player_hand for each check
+        player_hand = copy.deepcopy(gamestate.players[player])
+
         # Boolean controls whether or not to check for final double
         win_possible = True
 
         # Flatten combination of four groups
-        flattened_hand = [tile for group in combination for tile in group]
+        flattened_hand = [tile for group in grouped_hand for tile in group]
 
         # Check whether the combination of four groups can be made using tiles in player_hand (i.e. no repeat tiles used)
         for tile in flattened_hand:
@@ -173,9 +176,12 @@ def is_winning_hand(gamestate: GameState, player: str):
         # Check whether final two tiles are identical
         if win_possible and is_set(player_hand[0], player_hand[1]):
             is_winning = True
-            return is_winning, combination
+            # Add the last two tiles as a group of two to combination
+            double = (player_hand[0], player_hand[1])
+            grouped_hand += (double,)
+            return is_winning, grouped_hand
     
-    return is_winning, combination
+    return is_winning, grouped_hand
 
 def compute_score(gamestate: GameState, player: str) -> int:
     '''
@@ -196,73 +202,56 @@ def compute_score(gamestate: GameState, player: str) -> int:
         logging.error(f"Error: cannot retrieve player hand. Player {player} does not exist.")
         raise ValueError(f"Player {player} does not exist.")
     
-    is_winning, combination = is_winning_hand(gamestate, player)
+    is_winning, grouped_hand = is_winning_hand(gamestate, player)
 
-    print('')
-    print(f'combination = \n{combination}')
-    print('')
+    print(f'grouped_hand = \n{grouped_hand}')
 
     if not is_winning:
         score = 0
+        print(f'Error: Hand is not winning. Score = 0')
         return score
-    
-    # "combination" does not currently contain the set of two tiles (the double) that make up the winning hand
-    # This code removes all tiles in "combinoation" from "temp_hand" to identify the double
-    # Then, the double is added as a tuple to "combination" so that "combination" contains all tiles in the player's hand organized into groups
-
-    # Initialize double
-    double = []
-
-    temp_hand = copy.deepcopy(gamestate.players[player])
-
-    # Loop through each group in combination and remove each tile from temp_hand
-    for group in combination:
-        for tile in group:
-            if tile in temp_hand:
-                temp_hand.remove(tile)
-            else:
-                logging.error(f"Error: tile {tile} not in player hand.")
-
-    for tile in temp_hand:
-        double.append(tile)
-    
-    combination += (tuple(double),)
-    # (End code that adds the double to combination)
 
     # Initialize score - a winning hand has a base value of 2 points
     score = 2
-    gamestate.sort_player_hand(player)
-    gamestate.sort_player_hand(player)
-    hand = gamestate.players[player]
 
     rank_suits = ['stick', 'circle', '10k']
     color_suits = ['red', 'green', 'white']
     direction_suits = ['east', 'south', 'west', 'north']
 
+    ####################################################################################################################
     # Score check 1 - check whether all tiles with ranks are of the same suit
-    # Find the suit of the first tile that isn't a direction or color
+    # Initializations
     same_suit = False
-    for tile in hand:
-        if tile.suit in rank_suits:
-            suit = tile.suit
-            break
+    suit = None
+    num_groups = 0
     count = 0
+
+    # Count the number of groups that have suits and select a suit to compare against
+    for group in grouped_hand:
+        if group[0].suit in rank_suits:
+            num_groups += 1
+            suit = group[0].suit
+
     # Check whether all tiles with ranks have the same suits
-    for group in combination:
-        if (group[0].suit != suit
-            and group[0].suit in rank_suits):
-            break
-        if count == len(combination) - 1:
-            same_suit == True
-            count += 1
-    
+    if suit != None:
+        for group in grouped_hand:
+            if group[0].suit == suit:
+                count += 1 
+    if count == num_groups:
+        same_suit = True
+
     # Add 3 points to the score if all tiles with ranks have the same suit
     if same_suit:
         score += 3
 
-    # Score check 2 - check whether all tiles are sets/runs
+    print(f'score after score check 1: {score}')
+
+    ####################################################################################################################
+    # Score check 2 - check whether all groups are sets/runs
+    # If all groups are sets, add 3 points to the score
+    # If all groups are runs, add 1 point to the score
     sets_runs = []
-    for group in combination:
+    for group in grouped_hand:
         if (len(group) != 2
             and group[0].suit in rank_suits):
             if is_set(*group):
@@ -278,19 +267,30 @@ def compute_score(gamestate: GameState, player: str) -> int:
         else:
             score += 1
 
+    print(f'score after score check 2: {score}')
+
+    ####################################################################################################################
     # Score check 3 - check whether any groups are colors
-    for group in combination:
+    for group in grouped_hand:
         if group[0].suit in color_suits:
             score += 1
     
+    print(f'score after score check 3: {score}')
+
+    ####################################################################################################################
     # Score check 4 - check for directions
-    for group in combination:
+    for group in grouped_hand:
         if group[0].suit in direction_suits:
-            if len(group == 2):
+            if len(group) == 2:
                 break
             if group[0].suit == gamestate.macro_direction[0]:
                 score += 1
             if group[0].suit == gamestate.micro_direction[0]:
                 score += 1
 
+    print(f'score after score check 4: {score}')
+
+    print(f'Final score = {score}')
+    print('')
+    print('')
     return score

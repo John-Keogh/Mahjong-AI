@@ -54,6 +54,7 @@ class GameState:
         
         self.players[player].append(tile)
 
+
     def remove_tile_from_hand(self, tile: Tile, player: str) -> None:
         '''
         Removes a tile from the specified player's hand
@@ -68,6 +69,7 @@ class GameState:
         
         self.players[player].remove(tile)
 
+
     def clear_hand(self, player: str) -> None:
       '''
       Removes all tiles from the specified player's hand
@@ -81,11 +83,13 @@ class GameState:
     #   for tile in self.players[player][:]:
     #     self.players[player].remove(tile)
 
+
     def add_tile_to_draw_pool(self, tile: Tile) -> None:
         '''
         Adds a tile to the draw pool
         '''
         self.draw_pool.append(tile)
+
 
     def remove_tile_from_draw_pool(self, tile: Tile) -> None:
         '''
@@ -101,11 +105,13 @@ class GameState:
         
         self.draw_pool.remove(tile)
 
+
     def add_tile_to_discard_pool(self, tile: Tile) -> None:
         '''
         Adds a tile to the discard pool
         '''
         self.discard_pool.append(tile)
+
 
     def remove_tile_from_discard_pool(self, tile: Tile) -> None:
         '''
@@ -120,6 +126,7 @@ class GameState:
             raise ValueError(f"Tile {tile} not found in discard_pool.")
         
         self.discard_pool.remove(tile)
+
 
     def count(self, category: str) -> int:
         '''
@@ -137,6 +144,7 @@ class GameState:
         
         return len(categories[category])
 
+
     def sort_player_hand(self, player: str) -> None:
         '''
         Sorts the hand of the input player by suit and then rank
@@ -150,6 +158,7 @@ class GameState:
         # Update the player's hand with the sorted version
         self.players[player] = sorted_hand
 
+
     def print_player_hand(self, player: str):
         '''
         Prints every tile in a player's hand
@@ -160,11 +169,13 @@ class GameState:
         for tile in self.players[player]:
             tile.display()
 
+
     def step_macro_direction(self) -> None:
         '''
         Updates the macro direction of the game
         '''
         self.macro_direction = [self.macro_direction[-1]] + self.macro_direction[:-1]
+
 
     def step_micro_direction(self) -> None:
         '''
@@ -172,11 +183,13 @@ class GameState:
         '''
         self.micro_direction = [self.micro_direction[-1]] + self.micro_direction[:-1]
 
+
     def randomize_macro_direction(self) -> None:
         '''
         Shuffles the macrodirection of the game
         '''
         random.shuffle(self.macro_direction)
+
 
     def randomize_micro_direction(self) -> None:
         '''
