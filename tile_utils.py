@@ -104,9 +104,7 @@ def is_run(tile1: Tile, tile2: Tile, tile3: Tile) -> bool:
 
 
 # Features to add:
-# 1) handle sets of 4/hands with more than 14 tiles
-# 2) handle sets with multiple win conditions
-# 3) Return a copy of the hand sorted into groups (including the group of 2)
+# 1) handle sets with multiple win conditions
 def is_winning_hand(gamestate: GameState, player: str):
     '''
     Checks whether a player's hand meets any win conditions
@@ -204,11 +202,8 @@ def compute_score(gamestate: GameState, player: str) -> int:
     
     is_winning, grouped_hand = is_winning_hand(gamestate, player)
 
-    print(f'grouped_hand = \n{grouped_hand}')
-
     if not is_winning:
         score = 0
-        print(f'Error: Hand is not winning. Score = 0')
         return score
 
     # Initialize score - a winning hand has a base value of 2 points
@@ -244,8 +239,6 @@ def compute_score(gamestate: GameState, player: str) -> int:
     if same_suit:
         score += 3
 
-    print(f'score after score check 1: {score}')
-
     ####################################################################################################################
     # Score check 2 - check whether all groups are sets/runs
     # If all groups are sets, add 3 points to the score
@@ -267,30 +260,26 @@ def compute_score(gamestate: GameState, player: str) -> int:
         else:
             score += 1
 
-    print(f'score after score check 2: {score}')
-
     ####################################################################################################################
     # Score check 3 - check whether any groups are colors
     for group in grouped_hand:
         if group[0].suit in color_suits:
-            score += 1
+            if len(group) == 2:
+                score = 2
+                return score
+            else:
+                score += 1
     
-    print(f'score after score check 3: {score}')
-
     ####################################################################################################################
     # Score check 4 - check for directions
     for group in grouped_hand:
         if group[0].suit in direction_suits:
             if len(group) == 2:
-                break
+                score = 2
+                return score
             if group[0].suit == gamestate.macro_direction[0]:
                 score += 1
-            if group[0].suit == gamestate.micro_direction[0]:
+            if group[0].suit == gamestate.micro_direction[player]:
                 score += 1
 
-    print(f'score after score check 4: {score}')
-
-    print(f'Final score = {score}')
-    print('')
-    print('')
     return score
