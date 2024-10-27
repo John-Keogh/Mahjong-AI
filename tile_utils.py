@@ -1,16 +1,26 @@
-# Import Tile class from tile.py file
 from tile import Tile
 from gamestate import GameState
 import itertools
 import copy
 
 import logging
-# Set warning level
-level = logging.DEBUG
-# level = logging.ERROR
-level = logging.DEBUG
-# level = logging.ERROR
-logging.basicConfig(filename = 'tile_utils_logging.log', level=level, format='%(asctime)s - %(levelname)s - %(message)s')
+from logging.handlers import RotatingFileHandler
+
+# Set up a dedicated logger for tile_utils
+logger = logging.getLogger("tile_utils_logger")
+logger.setLevel(logging.ERROR)  # Set logging level
+
+# Define handler with rotation settings
+handler = RotatingFileHandler('tile_utils_logging.log', maxBytes=10*1024*1024, backupCount=5)
+handler.setLevel(logging.ERROR)  # Set logging level for this handler
+
+# Set log format
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# Add handler to logger
+logger.addHandler(handler)
+
 
 # Method to check if three tiles form a set
 def is_set(*args) -> bool:

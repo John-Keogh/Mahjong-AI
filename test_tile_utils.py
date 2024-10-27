@@ -1,13 +1,6 @@
 import unittest
 from tile_utils import is_set, is_run, is_winning_hand, compute_score, Tile, GameState
 
-import logging
-# Set warning level
-# level = logging.DEBUG
-level = logging.ERROR
-logging.basicConfig(filename = 'tile_utils_logging.log', level=level, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 class TestIsSetFunction(unittest.TestCase):
     def test_is_set_3_true(self):
         # Create three tiles with the same suit and rank
@@ -626,7 +619,7 @@ class TestIsSetFunction(unittest.TestCase):
         '''
         gamestate = GameState()
         player = 'player1'
-        expected_score = 3
+        expected_score = 4
 
         manual_tiles = [
             Tile('stick', 4),

@@ -1,31 +1,26 @@
 import random
 from tile import Tile
 
-import logging
-# Create a logger object
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)  # Set the logger level
-
 import random
 # random.seed(42)
 
-# Create handlers
-file_handler = logging.FileHandler('gamestate_logging.log')
-console_handler = logging.StreamHandler()
+import logging
+from logging.handlers import RotatingFileHandler
 
-# Set levels for handlers
-file_handler.setLevel(logging.DEBUG)
-console_handler.setLevel(logging.INFO)
+# Set up a dedicated logger for tile_utils
+logger = logging.getLogger("gamestate_logger")
+logger.setLevel(logging.ERROR)  # Set logging level
 
-# Create formatters and add them to handlers
-file_format = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-console_format = logging.Formatter('%(levelname)s - %(message)s')
-file_handler.setFormatter(file_format)
-console_handler.setFormatter(console_format)
+# Define handler with rotation settings
+handler = RotatingFileHandler('gamestate_logging.log', maxBytes=10*1024*1024, backupCount=5)
+handler.setLevel(logging.ERROR)  # Set logging level for this handler
 
-# Add handlers to the logger
-logger.addHandler(file_handler)
-logger.addHandler(console_handler)
+# Set log format
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# Add handler to logger
+logger.addHandler(handler)
 
 
 # Define GameState class to represent the state of the game
@@ -58,7 +53,7 @@ class GameState:
         Adds a tile to the specified player's hand
         '''
         if player not in self.players:
-            logging.error(f"Error: cannot add tile to hand. Player {player} does not exist.")
+            logger.error(f"Error: cannot add tile to hand. Player {player} does not exist.")
             raise ValueError(f"Player {player} does not exist.")
         
         self.players[player].append(tile)
@@ -69,11 +64,11 @@ class GameState:
         Removes a tile from the specified player's hand
         '''
         if player not in self.players:
-            logging.error(f"Error: cannot remove tile from hand. Player {player} does not exist.")
+            logger.error(f"Error: cannot remove tile from hand. Player {player} does not exist.")
             raise ValueError(f"Player {player} does not exist.")
         
         if tile not in self.players[player]:
-            logging.error(f"Error: cannot remove tile from hand. Tile {tile} not found in {player}'s hand.")
+            logger.error(f"Error: cannot remove tile from hand. Tile {tile} not found in {player}'s hand.")
             raise ValueError(f"Tile {tile} not found in {player}'s hand.")
         
         self.players[player].remove(tile)
@@ -84,7 +79,7 @@ class GameState:
       Removes all tiles from the specified player's hand
       '''
       if len(self.players[player]) == 0:
-          logging.debug('Player hand is already cleared.')
+          logger.debug('Player hand is already cleared.')
           return
       
       self.players[player].clear()
@@ -105,11 +100,11 @@ class GameState:
         Removes a tile from the draw pool
         '''
         if len(self.draw_pool) == 0:
-            logging.debug('Cannot remove tile from draw pool because draw pool is empty.')
+            logger.debug('Cannot remove tile from draw pool because draw pool is empty.')
             return
         
         if tile not in self.draw_pool:
-            logging.error('Cannot remove tile from draw pool because tile is not in draw pool.')
+            logger.error('Cannot remove tile from draw pool because tile is not in draw pool.')
             raise ValueError(f"Tile {tile} not found in draw_pool.")
         
         self.draw_pool.remove(tile)
@@ -127,11 +122,11 @@ class GameState:
         Removes a tile from the discard pool
         '''
         if len(self.discard_pool) == 0:
-            logging.debug('Cannot remove tile from discard pool because discard pool is empty.')
+            logger.debug('Cannot remove tile from discard pool because discard pool is empty.')
             return
         
         if tile not in self.discard_pool:
-            logging.error('Cannot remove tile from discard pool because tile is not in discard pool.')
+            logger.error('Cannot remove tile from discard pool because tile is not in discard pool.')
             raise ValueError(f"Tile {tile} not found in discard_pool.")
         
         self.discard_pool.remove(tile)
@@ -148,7 +143,7 @@ class GameState:
         }
 
         if category not in categories:
-            logging.error(f"Cannot count '{category}' because Category '{category}' not found.")
+            logger.error(f"Cannot count '{category}' because Category '{category}' not found.")
             raise ValueError(f"Category '{category}' not found.")
         
         return len(categories[category])
@@ -231,7 +226,7 @@ class GameState:
         Deal tiles to each player at the start of the game
         '''
         if len(self.draw_pool) != 136:
-            logging.error(f"Error: the draw pool does not contain the expected number of tiles (136).")
+            logger.error(f"Error: the draw pool does not contain the expected number of tiles (136).")
             raise ValueError(f"Draw pool not initialized correctly.")
         
         for _ in range(3):
