@@ -35,6 +35,15 @@ class GameState:
             'player3': [],
             'player4': []
         }
+
+        # Define player as int
+        self.players_to_int = {
+            'player1': 0,
+            'player2': 1,
+            'player3': 2,
+            'player4': 3
+        }
+
         self.draw_pool = []
         self.discard_pool = []
         self.macro_direction = ['east', 'south', 'west', 'north']
@@ -45,7 +54,10 @@ class GameState:
         self.suits = ['stick', 'circle', '10k', 'red', 'green', 'white', 'east', 'south', 'west', 'north']
         self.ranks = list(range(1, 10))
         self.suit_to_idx = {suit: idx for idx, suit in enumerate(self.suits)}
+        self.idx_to_suit = {idx: suit for idx, suit in enumerate(self.suits)}
         self.rank_to_idx = {rank: idx for idx, rank in enumerate(self.ranks)}
+        self.idx_to_rank = {idx: rank for idx, rank in enumerate(self.ranks)}
+
 
         # Define one-hot encoding of directions
         self.macro_direction_to_idx = {macro_direction: idx for idx, macro_direction in enumerate(self.macro_direction)}

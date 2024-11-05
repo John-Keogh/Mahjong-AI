@@ -105,36 +105,31 @@ class TestIsSetFunction(unittest.TestCase):
         self.assertTrue(result)
 
 
-    def test_encode_tile_batch_player_hand_1(self):
+    def test_encode_tile_batch_discard_pool(self):
         '''
         Test that a batch of tiles in a player's hand is properly encoded using encode_tile_batch function
         '''
         gamestate = GameState()
         player = 'player1'
 
-        # Simulate a player's hand using only 3 tiles for simplicity
+        # Simulate a player's hand using only 2 tiles for simplicity
         manual_tiles = [
-            Tile('stick', 1),
-            Tile('white'),
+            Tile('10k', 8),
             Tile('north')
         ]
 
         for tile in manual_tiles:
-            gamestate.add_tile_to_hand(tile, player)
+            gamestate.add_tile_to_discard_pool(tile)
 
-        # Simulate pulling tiles from a player's hand
-        tile_list = []
-        for tile in gamestate.players[player]:
-            tile_list.append(tile)
+        print(f"discard pool: {gamestate.discard_pool}")
         
         # Run encode_tile_batch function using the list of tiles extracted from player's hand
-        tile_encodings_tensor = encode_tile_batch(gamestate, tile_list)
+        tile_encodings_tensor = encode_tile_batch(gamestate, gamestate.discard_pool)
 
         # Manually encode the expected encoding tensor
         encoded_tile1 = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
-        encoded_tile2 = np.array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        encoded_tile3 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        correct_encoding = np.hstack((encoded_tile1, encoded_tile2, encoded_tile3))
+        encoded_tile2 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        correct_encoding = np.hstack((encoded_tile1, encoded_tile2))
         correct_encoding_tensor = torch.from_numpy(correct_encoding).float()
 
         result = (tile_encodings_tensor.all() == correct_encoding_tensor.all())

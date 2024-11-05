@@ -42,17 +42,17 @@ def is_set(*args) -> bool:
 
         # Check whether input tiles is empty
         if not tiles:
-            logging.error('Error: input to is_set function is empty.')       
+            logger.error('Error: input to is_set function is empty.')       
             return False
         
         # Check that there are only 2, 3, or 4 tiles
         if len(tiles) not in {2, 3, 4}:
-            logging.warning('Error: input to is_set function does not contain 2, 3, or 4 tiles.')  
+            logger.warning('Error: input to is_set function does not contain 2, 3, or 4 tiles.')  
             return False
         
         # Check that all tiles are of the Tile class
         if not all(isinstance(tile, Tile) for tile in tiles):
-            logging.error('Error: input to is_set function is not of the Tile class.')
+            logger.error('Error: input to is_set function is not of the Tile class.')
             return False
 
         first_tile = tiles[0]
@@ -63,7 +63,7 @@ def is_set(*args) -> bool:
         return same_suit and same_rank
     
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
         return False
 
 
@@ -81,19 +81,19 @@ def is_run(tile1: Tile, tile2: Tile, tile3: Tile) -> bool:
     try:
         # Check that all tiles are of the Tile class
         if not (isinstance(tile1, Tile) and isinstance(tile2, Tile) and isinstance(tile3, Tile)):
-            logging.error('Error: one or more inputs to is_run function is not of the Tile class.')
+            logger.error('Error: one or more inputs to is_run function is not of the Tile class.')
             return False
         
         # Check that all tiles are of the same suit
         if not(tile1.suit == tile2.suit == tile3.suit):
-            logging.debug(f"Tiles have different suits: {tile1.suit}, {tile2.suit}, {tile3.suit}")
+            logger.debug(f"Tiles have different suits: {tile1.suit}, {tile2.suit}, {tile3.suit}")
             return False
         
         # Check that the tiles are eligible to form a run (that they have a rank)
         if (tile1.rank == None
             or tile2.rank == None
             or tile3.rank == None):
-            logging.debug(f"One or more tiles do not have a rank.")
+            logger.debug(f"One or more tiles do not have a rank.")
             return False
         
         # Sort the tiles by rank
@@ -104,12 +104,12 @@ def is_run(tile1: Tile, tile2: Tile, tile3: Tile) -> bool:
                 sorted_tiles[2].rank == sorted_tiles[0].rank + 2):
             return True
         else:
-            logging.debug("Tiles are not consecutive: "
+            logger.debug("Tiles are not consecutive: "
                             f"{sorted_tiles[0].rank}, {sorted_tiles[1].rank}, {sorted_tiles[2].rank}")
             return False
     
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
         return False
 
 
@@ -129,11 +129,11 @@ def is_winning_hand(gamestate: GameState, player: str):
         e.g. ((1 circle, 1 circle, 1 circle), (1 stick, 2 stick, 3 stick), (8 stick, 8 stick, 8 stick), (9 stick, 9 stick, 9 stick), (4 circle, 4 circle))
     '''
     if not isinstance(player, str):
-        logging.error(f"Error: player input {player} is not a string.")
+        logger.error(f"Error: player input {player} is not a string.")
         raise ValueError(f"Player input {player} is not a string.")
     
     if player not in gamestate.players:
-        logging.error(f"Error: cannot retrieve player hand. Player {player} does not exist.")
+        logger.error(f"Error: cannot retrieve player hand. Player {player} does not exist.")
         raise ValueError(f"Player {player} does not exist.")
     
     # Initialize return values
@@ -156,7 +156,7 @@ def is_winning_hand(gamestate: GameState, player: str):
     
     # Check if there are enough valid groups to form a winning hand
     if len(valid_groups) < 4:
-        logging.debug("len(valid_groups) < 4")
+        logger.debug("len(valid_groups) < 4")
         return is_winning, None
     
     # Generate all combinations of four groups
@@ -203,11 +203,11 @@ def compute_score(gamestate: GameState, player: str) -> int:
     score - integer representing the score of a player's hand
     '''
     if not isinstance(player, str):
-        logging.error(f"Error: player input {player} is not a string.")
+        logger.error(f"Error: player input {player} is not a string.")
         raise ValueError(f"Player input {player} is not a string.")
     
     if player not in gamestate.players:
-        logging.error(f"Error: cannot retrieve player hand. Player {player} does not exist.")
+        logger.error(f"Error: cannot retrieve player hand. Player {player} does not exist.")
         raise ValueError(f"Player {player} does not exist.")
     
     is_winning, grouped_hand = is_winning_hand(gamestate, player)
@@ -279,17 +279,29 @@ def compute_score(gamestate: GameState, player: str) -> int:
                 return score
             else:
                 score += 1
-    
+
+
     ####################################################################################################################
-    # Score check 4 - check for directions
+    # Score check 4 - check for macro direction
     for group in grouped_hand:
         if group[0].suit in direction_suits:
             if len(group) == 2:
                 score = 2
                 return score
-            if group[0].suit == gamestate.macro_direction[0]:
+            elif group[0].suit == gamestate.macro_direction[0]:
                 score += 1
-            if group[0].suit == gamestate.micro_direction[player]:
+                break
+
+
+    ####################################################################################################################
+    # Score check 5 - check for micro direction
+    for group in grouped_hand:
+        if group[0].suit in direction_suits:
+            if len(group) == 2:
+                score = 2
+                return score
+            elif group[0].suit == gamestate.micro_direction[gamestate.players_to_int[player]]:
                 score += 1
+                break
 
     return score

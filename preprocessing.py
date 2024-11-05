@@ -3,6 +3,24 @@ from tile import Tile
 import torch
 from gamestate import GameState
 
+import logging
+from logging.handlers import RotatingFileHandler
+
+# Set up a dedicated logger for tile_utils
+logger = logging.getLogger("preprocessing_logger")
+logger.setLevel(logging.ERROR)  # Set logging level
+
+# Define handler with rotation settings
+handler = RotatingFileHandler('preprocessing_logging.log', maxBytes=10*1024*1024, backupCount=5)
+handler.setLevel(logging.ERROR)  # Set logging level for this handler
+
+# Set log format
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# Add handler to logger
+logger.addHandler(handler)
+
 def encode_tile(gamestate: GameState, tile: Tile) -> np.ndarray:
     '''
     Encode a tile with one-hot encoding
@@ -42,6 +60,7 @@ def encode_tile_batch(gamestate: GameState, tiles: list[Tile]):
     '''
     tile_encodings = np.array([encode_tile(gamestate, tile) for tile in tiles])
     tile_encodings_tensor = torch.from_numpy(tile_encodings).float()
+    tile_encodings_tensor = torch.flatten(tile_encodings_tensor)
     return tile_encodings_tensor
 
 def encode_macro_direction(gamestate: GameState):
@@ -96,34 +115,61 @@ def prepare_input(gamestate: GameState, player: str):
     input_tensor: a PyTorch tensor representing all information available to player
     '''
     # 1) Tiles in player's hand
-    tiles_in_hand = []
-    for tile in gamestate.players[player]:
-        tiles_in_hand.append(tile)
-    tiles_in_hand_tensor = encode_tile_batch(gamestate, tiles_in_hand)
-    tiles_in_hand_tensor = torch.flatten(tiles_in_hand_tensor)
-    # print(f"tiles_in_hand_tensor = \n{tiles_in_hand_tensor}")
+    tiles_in_hand_tensor = encode_tile_batch(gamestate, gamestate.players[player])
+    logger.debug(f"tiles_in_hand_tensor = \n{tiles_in_hand_tensor}")
 
     # 2) Tiles in discard pool
-    tiles_in_discard_pool = []
-    for tile in gamestate.discard_pool:
-        tiles_in_discard_pool.append(tile)
-    tiles_in_discard_pool_tensor = encode_tile_batch(gamestate, tiles_in_discard_pool)
-    # print(f"tiles_in_discard_pool_tensor = \n{tiles_in_discard_pool_tensor}")
+    logger.debug(f"tiles in discard pool: {gamestate.discard_pool}")
+    if len(gamestate.discard_pool) == 0:
+        tiles_in_discard_pool_tensor = torch.empty(0)
+    elif len(gamestate.discard_pool) == 1:
+        tile_in_discard_pool_encoded = encode_tile(gamestate, gamestate.discard_pool[0])
+        tiles_in_discard_pool_tensor = torch.from_numpy(tile_in_discard_pool_encoded).float()
+    else:
+        tiles_in_discard_pool_tensor = encode_tile_batch(gamestate, gamestate.discard_pool)
+    logger.debug(f"tiles_in_discard_pool_tensor = \n{tiles_in_discard_pool_tensor}")
 
     # 3) Tiles in draw pool (one-hot encoding of all zeros)
-    tiles_not_in_hand = 136 - 14 - 3*13 # 136 total tiles, 14 in player's hand, 13 in all other players' hands
-    tiles_in_draw_pool = tiles_not_in_hand - len(tiles_in_discard_pool)
-    tiles_in_draw_pool_tensor = torch.zeros(tiles_in_draw_pool * 19) # 19 one-hot values per tile
-    # print(f"tiles_in_draw_pool_tensor = \n{tiles_in_draw_pool_tensor}")
+    num_tiles_not_in_hand = 136 - 14 - 3*13 # 136 total tiles, 14 in player's hand, 13 in all other players' hands
+    num_tiles_in_draw_pool = num_tiles_not_in_hand - len(gamestate.discard_pool)
+    tiles_in_draw_pool_tensor = torch.zeros(num_tiles_in_draw_pool * 19) # 19 one-hot values per tile
+    logger.debug(f"tiles_in_draw_pool_tensor = \n{tiles_in_draw_pool_tensor}")
 
     # 4) Macro game direction
     macro_direction_tensor = encode_macro_direction(gamestate)
-    # print(f"macro_direction_tensor = \n{macro_direction_tensor}")
+    logger.debug(f"macro_direction_tensor = \n{macro_direction_tensor}")
 
     # 5) Micro game direction
     micro_direction_tensor = encode_micro_direction(gamestate)
-    # print(f"micro_direction_tensor = \n{micro_direction_tensor}")
+    logger.debug(f"micro_direction_tensor = \n{micro_direction_tensor}")
 
     input_tensor = torch.hstack((tiles_in_hand_tensor, tiles_in_discard_pool_tensor, tiles_in_draw_pool_tensor, macro_direction_tensor, micro_direction_tensor))
 
     return input_tensor
+
+def decode_hand(gamestate: GameState, gamestate_tensor) -> list[Tile]:
+    '''
+    Decode a player's hand with one-hot decoding
+
+    Args:
+    gamestate_tensor: PyTorch Tensor that represents the entire state of the game
+        Note that only the first 19 * 14 entries represent the player's hand
+
+    Returns:
+    player_hand: A list of objects of the Tile class
+    '''
+    player_hand = []
+    for k in range(14):
+        for i in range(0, 10):
+            if gamestate_tensor[i + 19*k] == 1:
+                suit = gamestate.idx_to_suit[i]
+        
+        rank = None
+        for j in range(10, 19):
+            if gamestate_tensor[j + 19*k] == 1:
+                rank = gamestate.idx_to_rank[j-10]
+                
+        tile = Tile(suit, rank)
+        player_hand.append(tile)
+
+    return player_hand
