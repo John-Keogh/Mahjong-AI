@@ -76,3 +76,45 @@ def save_winner_data(conn, game_id, winner_history, player, score):
         cursor.execute("INSERT INTO winner_history (game_id, player, turn, gamestate_tensor, final_score) VALUES (?, ?, ?, ?, ?)",
                        (game_id, player, turn, gamestate_blob, score))
     conn.commit()
+
+def load_training_data(conn, decay=0.95):
+    """
+    Load training data from the database and apply a decaying score factor to earlier turns.
+    
+    Args:
+    conn (sqlite3.Connection): SQLite database connection
+    decay (float): Decay factor to apply to earlier turns' scores
+
+    Returns:
+    tuple: (data, targets) where data is a tensor of game states and targets are their corresponding scores.
+    """
+    cursor = conn.cursor()
+    cursor.execute('SELECT game_id, turn, gamestate_tensor, final_score FROM winner_history ORDER BY game_id, turn')
+    rows = cursor.fetchall()
+
+    data = []
+    targets = []
+    current_game_id = None
+    turn_count = 0
+
+    for row in rows:
+        game_id, turn, tensor_blob, final_score = row
+
+        # Reset turn count for each new game
+        if game_id != current_game_id:
+            current_game_id = game_id
+            turn_count = cursor.execute('SELECT COUNT(*) FROM winner_history WHERE game_id = ?', (game_id,)).fetchone()[0]
+
+        # Apply decay based on how far the turn is from the final turn
+        adjusted_score = final_score * (decay ** (turn_count - turn - 1))
+
+        # Convert the tensor BLOB back to a PyTorch tensor
+        gamestate_tensor = torch.from_numpy(np.frombuffer(tensor_blob, dtype=np.float32).copy())
+        data.append(gamestate_tensor)
+        targets.append(adjusted_score)
+
+    # Stack all the tensors for efficient batch processing
+    data = torch.stack(data)
+    targets = torch.tensor(targets, dtype=torch.float32)
+    
+    return data, targets

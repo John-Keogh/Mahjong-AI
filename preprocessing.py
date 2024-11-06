@@ -6,7 +6,7 @@ from gamestate import GameState
 import logging
 from logging.handlers import RotatingFileHandler
 
-# Set up a dedicated logger for tile_utils
+# Set up a dedicated logger for preprocessing
 logger = logging.getLogger("preprocessing_logger")
 logger.setLevel(logging.ERROR)  # Set logging level
 
