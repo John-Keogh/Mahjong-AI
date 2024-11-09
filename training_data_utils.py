@@ -44,7 +44,7 @@ def load_winner_history(conn, game_id):
         game_id (int): Unique identifier for each game
     
     Returns:
-        list: List of (player, turn, gamestate_tensor) tuples
+        list: List of (game_id, player, turn, gamestate_tensor, final_score) tuples
     """
     cursor = conn.cursor()
     cursor.execute('SELECT game_id, player, turn, gamestate_tensor, final_score FROM winner_history WHERE game_id = ?', (game_id,))
