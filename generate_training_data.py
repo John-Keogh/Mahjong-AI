@@ -36,9 +36,10 @@ cursor.execute('''
 conn.commit()
 
 
-num_rounds = 2
+num_rounds = 150000
 game_id = get_last_game_id(conn)
 count = 0
+batch_winners = 0
 
 micro_dict = {'player1': 0,
             'player2': 1,
@@ -117,12 +118,14 @@ for i in range(num_rounds):
         save_winner_data(conn, game_id, winner_history, player, score)
         game_id += 1
         print(f"$$$ WINNER $$$")
+        batch_winners += 1
 
     count += 1
 
 global_end_time = time.time()
 global_elapsed_time += global_end_time - global_start_time
 print(f"Total elapsed time: {global_elapsed_time:.2f} s")
+print(f"Total number of new winning datasets added: {batch_winners}")
 
 # Close database
 conn.close()
