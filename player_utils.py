@@ -4,6 +4,7 @@ from tile_utils import is_set, is_run, is_winning_hand, compute_score
 
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
 # Set up a dedicated logger for tile_utils
 logger = logging.getLogger("player_utils_logger")
@@ -21,6 +22,17 @@ handler.setFormatter(formatter)
 
 # Add handler to logger
 logger.addHandler(handler)
+
+# Logging
+logger = logging.getLogger("player_utils_logger")
+logger.setLevel(logging.INFO)
+
+log_file_path = "logs/player_utils_logging.log"
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+
+file_handler = RotatingFileHandler(log_file_path, maxBytes=10*1024*1024, backupCount=5)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
 
 
 def pon_possible(gamestate: GameState, tile: Tile, player: str) -> bool:

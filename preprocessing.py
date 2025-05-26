@@ -5,21 +5,20 @@ from gamestate import GameState
 
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
-# Set up a dedicated logger for preprocessing
+# Logging
 logger = logging.getLogger("preprocessing_logger")
-logger.setLevel(logging.ERROR)  # Set logging level
+logger.setLevel(logging.INFO)
 
-# Define handler with rotation settings
-handler = RotatingFileHandler('preprocessing_logging.log', maxBytes=10*1024*1024, backupCount=5)
-handler.setLevel(logging.ERROR)  # Set logging level for this handler
+log_file_path = "logs/preprocessing_logging.log"
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
-# Set log format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
+file_handler = RotatingFileHandler(log_file_path, maxBytes=10*1024*1024, backupCount=5)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
 
-# Add handler to logger
-logger.addHandler(handler)
+TILE_ENCODING_LEN = 19
 
 def encode_tile(gamestate: GameState, tile: Tile) -> np.ndarray:
     '''
@@ -30,6 +29,8 @@ def encode_tile(gamestate: GameState, tile: Tile) -> np.ndarray:
 
     Returns:
     tile_encoding: a numpy vector of 19 zeros/ones to represent the tile suit and rank
+        10 suits: 'stick', 'circle', '10k', 'red', 'green', 'white', 'east', 'south', 'west', 'north'
+        9 ranks: 1, 2, 3, 4, 5, 6, 7, 8, 9
     '''
     if tile.suit not in gamestate.suits:
         raise ValueError(f"Invalid tile suit: {tile.suit}")
@@ -112,14 +113,21 @@ def prepare_input(gamestate: GameState, player: str):
     player: 'player1', 'player2', etc.
 
     Returns:
-    input_tensor: a PyTorch tensor representing all information available to player
+    input_tensor: a PyTorch tensor with 2839 elements representing all information available to player
+        Tiles in player's hand: 14*19 = 266
+        Tiles in the draw/discard pool: (136 - 14 - 3*13)*19 = 1577
+        Macro game direction: 4
+        Micro game direction: 4
+        266 + 1577 + 4 + 4 = 1851
     '''
+    logger.debug(f"player: {player}")
+
     # 1) Tiles in player's hand
     tiles_in_hand_tensor = encode_tile_batch(gamestate, gamestate.players[player])
     logger.debug(f"tiles_in_hand_tensor = \n{tiles_in_hand_tensor}")
+    logger.debug(f"size of tiles_in_hand_tensor: {tiles_in_hand_tensor.numel()}")
 
     # 2) Tiles in discard pool
-    logger.debug(f"tiles in discard pool: {gamestate.discard_pool}")
     if len(gamestate.discard_pool) == 0:
         tiles_in_discard_pool_tensor = torch.empty(0)
     elif len(gamestate.discard_pool) == 1:
@@ -128,22 +136,26 @@ def prepare_input(gamestate: GameState, player: str):
     else:
         tiles_in_discard_pool_tensor = encode_tile_batch(gamestate, gamestate.discard_pool)
     logger.debug(f"tiles_in_discard_pool_tensor = \n{tiles_in_discard_pool_tensor}")
+    logger.debug(f"size of tiles_in_discard_pool_tensor: {tiles_in_discard_pool_tensor.numel()}")
 
     # 3) Tiles in draw pool (one-hot encoding of all zeros)
-    num_tiles_not_in_hand = 136 - 14 - 3*13 # 136 total tiles, 14 in player's hand, 13 in all other players' hands
-    num_tiles_in_draw_pool = num_tiles_not_in_hand - len(gamestate.discard_pool)
-    tiles_in_draw_pool_tensor = torch.zeros(num_tiles_in_draw_pool * 19) # 19 one-hot values per tile
+    tiles_in_draw_pool_tensor = torch.zeros(len(gamestate.draw_pool) * TILE_ENCODING_LEN) # zeros because unrevealed
     logger.debug(f"tiles_in_draw_pool_tensor = \n{tiles_in_draw_pool_tensor}")
+    logger.debug(f"size of tiles_in_draw_pool_tensor: {tiles_in_draw_pool_tensor.numel()}")
 
     # 4) Macro game direction
     macro_direction_tensor = encode_macro_direction(gamestate)
     logger.debug(f"macro_direction_tensor = \n{macro_direction_tensor}")
+    logger.debug(f"size of macro_direction_tensor: {macro_direction_tensor.numel()}")
 
     # 5) Micro game direction
     micro_direction_tensor = encode_micro_direction(gamestate)
     logger.debug(f"micro_direction_tensor = \n{micro_direction_tensor}")
+    logger.debug(f"size of micro_direction_tensor: {micro_direction_tensor.numel()}")
+
 
     input_tensor = torch.hstack((tiles_in_hand_tensor, tiles_in_discard_pool_tensor, tiles_in_draw_pool_tensor, macro_direction_tensor, micro_direction_tensor))
+    logger.debug(f"size of input_tensor: {input_tensor.numel()}")
 
     return input_tensor
 
@@ -161,12 +173,12 @@ def decode_hand(gamestate: GameState, gamestate_tensor) -> list[Tile]:
     player_hand = []
     for k in range(14):
         for i in range(0, 10):
-            if gamestate_tensor[i + 19*k] == 1:
+            if gamestate_tensor[i + TILE_ENCODING_LEN*k] == 1:
                 suit = gamestate.idx_to_suit[i]
         
         rank = None
-        for j in range(10, 19):
-            if gamestate_tensor[j + 19*k] == 1:
+        for j in range(10, TILE_ENCODING_LEN):
+            if gamestate_tensor[j + TILE_ENCODING_LEN*k] == 1:
                 rank = gamestate.idx_to_rank[j-10]
                 
         tile = Tile(suit, rank)

@@ -1,5 +1,5 @@
 import unittest
-from preprocessing import encode_tile, encode_tile_batch, Tile, GameState, np, torch, encode_macro_direction, encode_micro_direction
+from preprocessing import encode_tile, encode_tile_batch, Tile, GameState, np, torch, encode_macro_direction, encode_micro_direction, prepare_input, decode_hand
 
 class TestIsSetFunction(unittest.TestCase):
     def test_encode_tile_with_rank(self):
@@ -167,6 +167,47 @@ class TestIsSetFunction(unittest.TestCase):
         correct_encoding[0] = 1
 
         result = (encoded_micro_direction.all() == correct_encoding.all())
+        self.assertTrue(result)
+
+    def test_gamestate_tensor_length(self):
+        '''
+        Test that the prepare_input function returns a gamestate tensor with the correct number of elements (1851)
+        '''
+        player = 'player1'
+
+        # Initialize game
+        gamestate = GameState()
+        gamestate.randomize_macro_direction()
+        gamestate.randomize_micro_direction()
+        gamestate.initialize_draw_pool()
+        gamestate.deal_tiles()
+
+        gamestate_tensor = prepare_input(gamestate, player)
+
+        correct_length = 1851 # (tiles: 14 in hand + (136-14-3*13) tiles in draw/discard pool) * 19 one-hot encoding + 8 directions
+        result = correct_length == gamestate_tensor.numel()
+        self.assertTrue(result)
+
+
+    def test_decode_hand(self):
+        '''
+        Test that the decode_hand function properly decodes a player's hand that was one-hot encoded
+        '''
+        player = 'player1'
+
+        # Initialize game
+        gamestate = GameState()
+        gamestate.randomize_macro_direction()
+        gamestate.randomize_micro_direction()
+        gamestate.initialize_draw_pool()
+        gamestate.deal_tiles()
+
+        player_hand = gamestate.players[player]
+
+        gamestate_tensor = prepare_input(gamestate, player)
+        test_decoded_hand = decode_hand(gamestate, gamestate_tensor)
+
+        result = player_hand == test_decoded_hand
         self.assertTrue(result)
 
 if __name__ == '__main__':

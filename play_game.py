@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import copy
 import itertools
 
+NUM_ROUNDS = 10
+
 num_wins = []
 exec_time = []
 scores = []
@@ -15,7 +17,7 @@ scores = []
 global_start_time = time.time()
 global_elapsed_time = 0
 round = 0
-while round < 25000:
+while round < NUM_ROUNDS:
     if round % 250 == 0:
         print(f"Round: {round}")
 
