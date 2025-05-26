@@ -1,0 +1,191 @@
+2025-05-17 00:11:29,741 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:11:34,369 - INFO - Initialized PPO model.
+2025-05-17 00:12:26,234 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:12:27,328 - INFO - Initialized PPO model.
+2025-05-17 00:14:07,304 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:14:08,396 - INFO - Initialized PPO model.
+2025-05-17 00:15:46,970 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:15:48,047 - INFO - Initialized PPO model.
+2025-05-17 00:16:44,856 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:16:45,932 - INFO - Initialized PPO model.
+2025-05-17 00:17:30,711 - INFO - Starting Mahjong discard model training.
+2025-05-17 00:17:31,786 - INFO - Initialized PPO model.
+2025-05-20 22:19:22,252 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:19:26,820 - INFO - Initialized PPO model.
+2025-05-20 22:21:03,882 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:21:04,956 - INFO - Initialized PPO model.
+2025-05-20 22:24:42,829 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:24:43,927 - INFO - Initialized PPO model.
+2025-05-20 22:26:19,903 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:26:20,995 - INFO - Initialized PPO model.
+2025-05-20 22:27:39,122 - INFO - Training complete.
+2025-05-20 22:27:39,143 - INFO - Model saved to models/discard_model_v1.
+2025-05-20 22:27:39,144 - INFO - Starting evaluation episode.
+2025-05-20 22:27:39,151 - INFO - Evaluation complete.
+2025-05-20 22:43:40,953 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:43:41,937 - INFO - Initialized PPO model.
+2025-05-20 22:45:05,012 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:45:05,951 - INFO - Initialized PPO model.
+2025-05-20 22:51:04,514 - INFO - Starting Mahjong discard model training.
+2025-05-20 22:51:05,440 - INFO - Initialized PPO model.
+2025-05-20 22:51:56,863 - INFO - Starting Mahjong discard model training.
+2025-05-25 15:48:49,436 - INFO - Starting Mahjong discard model training.
+2025-05-25 15:48:54,014 - INFO - Initialized PPO model.
+2025-05-25 16:02:50,500 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:02:51,550 - INFO - Initialized PPO model.
+2025-05-25 16:13:42,630 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:13:43,559 - INFO - Initialized PPO model.
+2025-05-25 16:18:42,755 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:18:43,690 - INFO - Initialized PPO model.
+2025-05-25 16:19:15,525 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:19:16,452 - INFO - Initialized PPO model.
+2025-05-25 16:20:05,992 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:20:06,918 - INFO - Initialized PPO model.
+2025-05-25 16:20:44,250 - INFO - Starting Mahjong discard model training.
+2025-05-25 16:20:45,185 - INFO - Initialized PPO model.
+2025-05-25 17:05:06,381 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:05:09,591 - INFO - Initialized PPO model.
+2025-05-25 17:06:17,253 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:06:18,196 - INFO - Initialized PPO model.
+2025-05-25 17:08:03,306 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:08:04,234 - INFO - Initialized PPO model.
+2025-05-25 17:12:11,714 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:12:12,705 - INFO - Initialized PPO model.
+2025-05-25 17:12:36,634 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:12:37,569 - INFO - Initialized PPO model.
+2025-05-25 17:14:04,887 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:14:05,827 - INFO - Initialized PPO model.
+2025-05-25 17:15:18,978 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:15:19,907 - INFO - Initialized PPO model.
+2025-05-25 17:33:29,221 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:33:30,213 - INFO - Initialized PPO model.
+2025-05-25 17:34:40,543 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:34:41,477 - INFO - Initialized PPO model.
+2025-05-25 17:35:33,085 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:35:34,020 - INFO - Initialized PPO model.
+2025-05-25 17:37:11,415 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:37:12,357 - INFO - Initialized PPO model.
+2025-05-25 17:50:56,649 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:50:57,566 - INFO - Initialized PPO model.
+2025-05-25 17:52:39,165 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:52:40,117 - INFO - Initialized PPO model.
+2025-05-25 17:54:34,907 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:54:35,893 - INFO - Initialized PPO model.
+2025-05-25 17:58:59,794 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:59:00,763 - INFO - Initialized PPO model.
+2025-05-25 17:59:38,309 - INFO - Starting Mahjong discard model training.
+2025-05-25 17:59:39,240 - INFO - Initialized PPO model.
+2025-05-25 18:00:23,077 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:00:24,020 - INFO - Initialized PPO model.
+2025-05-25 18:00:53,287 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:00:54,229 - INFO - Initialized PPO model.
+2025-05-25 18:02:17,626 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:02:18,623 - INFO - Initialized PPO model.
+2025-05-25 18:04:28,158 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:04:29,109 - INFO - Initialized PPO model.
+2025-05-25 18:06:11,719 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:06:12,687 - INFO - Initialized PPO model.
+2025-05-25 18:06:31,224 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:06:32,155 - INFO - Initialized PPO model.
+2025-05-25 18:11:10,901 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:11:11,838 - INFO - Initialized PPO model.
+2025-05-25 18:12:17,966 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:12:18,902 - INFO - Initialized PPO model.
+2025-05-25 18:18:05,820 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:18:06,786 - INFO - Initialized PPO model.
+2025-05-25 18:20:16,434 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:20:17,391 - INFO - Initialized PPO model.
+2025-05-25 18:21:42,185 - INFO - Training complete.
+2025-05-25 18:21:42,213 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:21:42,219 - INFO - Starting evaluation episode.
+2025-05-25 18:21:42,535 - INFO - Evaluation complete.
+2025-05-25 18:26:25,888 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:26:26,806 - INFO - Initialized PPO model.
+2025-05-25 18:27:52,281 - INFO - Training complete.
+2025-05-25 18:27:52,293 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:27:52,293 - INFO - Starting evaluation episode.
+2025-05-25 18:30:07,016 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:30:07,971 - INFO - Initialized PPO model.
+2025-05-25 18:31:32,958 - INFO - Training complete.
+2025-05-25 18:31:32,968 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:31:32,968 - INFO - Starting evaluation episode.
+2025-05-25 18:31:33,164 - INFO - Evaluation complete.
+2025-05-25 18:32:44,673 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:32:45,684 - INFO - Initialized PPO model.
+2025-05-25 18:34:10,401 - INFO - Training complete.
+2025-05-25 18:34:10,429 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:34:10,429 - INFO - Starting evaluation episode.
+2025-05-25 18:34:10,591 - INFO - Evaluation complete.
+2025-05-25 18:37:10,739 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:37:11,695 - INFO - Initialized PPO model.
+2025-05-25 18:38:36,641 - INFO - Training complete.
+2025-05-25 18:38:36,651 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:38:36,651 - INFO - Starting evaluation episode.
+2025-05-25 18:38:36,831 - INFO - Evaluation complete.
+2025-05-25 18:46:44,032 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:46:44,959 - INFO - Initialized PPO model.
+2025-05-25 18:48:10,258 - INFO - Training complete.
+2025-05-25 18:48:10,278 - INFO - Model saved to models/discard_model_v1.
+2025-05-25 18:48:10,278 - INFO - Starting evaluation episode.
+2025-05-25 18:48:10,440 - INFO - Evaluation complete.
+2025-05-25 18:53:38,784 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 18:55:24,808 - INFO - Starting Mahjong discard model training.
+2025-05-25 18:56:17,626 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 18:56:17,628 - INFO - Loading existing model...
+2025-05-25 18:56:18,767 - INFO - Initialized PPO model.
+2025-05-25 18:58:09,782 - INFO - Training complete.
+2025-05-25 19:00:12,500 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:00:12,500 - INFO - Loading existing model...
+2025-05-25 19:00:13,609 - INFO - Initialized PPO model.
+2025-05-25 19:02:02,717 - INFO - Training complete.
+2025-05-25 19:02:02,733 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:02:02,733 - INFO - Starting evaluation episode.
+2025-05-25 19:02:02,910 - INFO - Evaluation complete.
+2025-05-25 19:04:15,394 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:04:15,394 - INFO - Loading existing model...
+2025-05-25 19:04:16,414 - INFO - Initialized PPO model.
+2025-05-25 19:05:46,624 - INFO - Training complete.
+2025-05-25 19:05:46,645 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:05:46,645 - INFO - Starting evaluation episode.
+2025-05-25 19:05:46,815 - INFO - Evaluation complete.
+2025-05-25 19:07:45,348 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:07:45,348 - INFO - Loading existing model...
+2025-05-25 19:07:46,358 - INFO - Initialized PPO model.
+2025-05-25 19:09:18,105 - INFO - Training complete. Duration: 00:01:31 (HH:MM:SS)
+2025-05-25 19:09:18,117 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:09:18,117 - INFO - Starting evaluation episode.
+2025-05-25 19:09:18,298 - INFO - Evaluation complete.
+2025-05-25 19:10:17,612 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:10:17,612 - INFO - Loading existing model...
+2025-05-25 19:10:18,588 - INFO - Initialized PPO model.
+2025-05-25 19:31:53,992 - INFO - Training complete. Duration: 00:21:35
+2025-05-25 19:31:54,022 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:31:54,022 - INFO - Starting evaluation episode.
+2025-05-25 19:31:54,203 - INFO - Evaluation complete.
+2025-05-25 19:36:23,024 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:36:35,260 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:36:44,073 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:38:16,554 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:38:16,554 - INFO - Loading existing model...
+2025-05-25 19:38:17,627 - INFO - Initialized PPO model.
+2025-05-25 19:39:15,649 - INFO - Training complete. Duration: 00:00:58
+2025-05-25 19:39:15,669 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:39:15,669 - INFO - Starting evaluation episode.
+2025-05-25 19:39:15,864 - INFO - Evaluation complete.
+2025-05-25 19:43:01,847 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:43:01,862 - INFO - Loading existing model...
+2025-05-25 19:43:02,814 - INFO - Initialized PPO model.
+2025-05-25 19:44:34,297 - INFO - Training complete. Duration: 00:01:31
+2025-05-25 19:44:34,317 - INFO - Model saved to models/discard_model_v1
+2025-05-25 19:44:34,317 - INFO - Starting evaluation episode.
+2025-05-25 19:44:34,509 - INFO - Evaluation complete.
+2025-05-25 19:48:39,695 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:48:39,696 - INFO - Creating new model...
+2025-05-25 19:48:40,712 - INFO - Model saved to models/discard_model_v0
+2025-05-25 19:48:40,712 - INFO - Starting evaluation episode.
+2025-05-25 19:48:40,895 - INFO - Evaluation complete.
+2025-05-25 19:49:11,458 - INFO - === Starting Mahjong discard model training ===
+2025-05-25 19:49:11,458 - INFO - Loading existing model...
+2025-05-25 19:49:12,444 - INFO - Model saved to models/discard_model_v0
+2025-05-25 19:49:12,450 - INFO - Starting evaluation episode.
+2025-05-25 19:49:12,614 - INFO - Evaluation complete.

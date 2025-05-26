@@ -11,20 +11,20 @@ from gamestate import GameState
 from tile import Tile
 
 
-# Suppress warning regarding using `weights_only=False` in `torch.load`
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
+# # Suppress warning regarding using `weights_only=False` in `torch.load`
+# import warnings
+# warnings.filterwarnings("ignore", category=FutureWarning)
 
-# Define the database path
-db_folder = "G:\\VS Code\\Mahjong_Data"
-os.makedirs(db_folder, exist_ok=True)
-db_path = os.path.join(db_folder, "mahjong_eval_net_training_data.db")
+# # Define the database path
+# db_folder = "G:\\VS Code\\Mahjong_Data"
+# os.makedirs(db_folder, exist_ok=True)
+# db_path = os.path.join(db_folder, "mahjong_eval_net_training_data.db")
 
-# Connect to SQLite database (or create it if it doesn't exist)
-conn = sqlite3.connect(db_path)
+# # Connect to SQLite database (or create it if it doesn't exist)
+# conn = sqlite3.connect(db_path)
 
-game_id = get_last_game_id(conn)
-print(f"Last game ID: {game_id}")
+# game_id = get_last_game_id(conn)
+# print(f"Last game ID: {game_id}")
 
 # data, targets = load_training_data(conn, decay=0.95)
 
@@ -95,3 +95,4 @@ print(f"Last game ID: {game_id}")
 
 # predicted_hand_value = predicted_value.item() # convert from tensor to scalar value
 # print(f"Predicted hand vlue: {predicted_hand_value:.2f}")
+

@@ -6,21 +6,18 @@ import random
 
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
-# Set up a dedicated logger for tile_utils
+# Logging
 logger = logging.getLogger("gamestate_logger")
-logger.setLevel(logging.ERROR)  # Set logging level
+logger.setLevel(logging.INFO)
 
-# Define handler with rotation settings
-handler = RotatingFileHandler('gamestate_logging.log', maxBytes=10*1024*1024, backupCount=5)
-handler.setLevel(logging.ERROR)  # Set logging level for this handler
+log_file_path = "logs/gamestate_logging.log"
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
-# Set log format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-
-# Add handler to logger
-logger.addHandler(handler)
+file_handler = RotatingFileHandler(log_file_path, maxBytes=10*1024*1024, backupCount=5)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
 
 
 # Define GameState class to represent the state of the game
@@ -99,9 +96,7 @@ class GameState:
           return
       
       self.players[player].clear()
-      
-    #   for tile in self.players[player][:]:
-    #     self.players[player].remove(tile)
+    
 
 
     def add_tile_to_draw_pool(self, tile: Tile) -> None:
@@ -254,3 +249,6 @@ class GameState:
         for player in self.players:
             self.add_tile_to_hand(self.draw_pool[0], player)
             self.remove_tile_from_draw_pool(self.draw_pool[0])
+        
+        self.add_tile_to_hand(self.draw_pool[0], 'player1')
+        self.remove_tile_from_draw_pool(self.draw_pool[0])

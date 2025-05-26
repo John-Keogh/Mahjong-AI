@@ -1,20 +1,17 @@
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 
-# Set up a dedicated logger for tile_utils
+# Logging
 logger = logging.getLogger("tile_logger")
-logger.setLevel(logging.ERROR)  # Set logging level
+logger.setLevel(logging.INFO)
 
-# Define handler with rotation settings
-handler = RotatingFileHandler('tile_logging.log', maxBytes=10*1024*1024, backupCount=5)
-handler.setLevel(logging.ERROR)  # Set logging level for this handler
+log_file_path = "logs/tile_logging.log"
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
-# Set log format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-
-# Add handler to logger
-logger.addHandler(handler)
+file_handler = RotatingFileHandler(log_file_path, maxBytes=10*1024*1024, backupCount=5)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
 
 # Define Tile class to represent game pieces
 class Tile:
